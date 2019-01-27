@@ -187,8 +187,8 @@ print("\nTAREFA 7: Verifique o gráfico!")
 
 types = []
 for row in data_list[1:]:
-    if row[-3] not in types:
-        types.append(row[-3])
+    types.append(row[-3])
+types = set(types)
 
 gender_list = column_to_list(data_list, -3)
 quantity = count_gender(data_list, -3)
@@ -229,6 +229,10 @@ total_trip_duration = 0
 
 trip_duration_list = list(map(int, trip_duration_list))
 
+def find(trip_duration_list):
+    midel = len(trip_duration_list) / 2
+    return list(trip_duration_list[midel], trip_duration_list[midel-1])
+
 for trip_duration in trip_duration_list:
     if trip_duration < min_trip or min_trip == 0:
         min_trip = trip_duration
@@ -244,7 +248,7 @@ mean_trip = round(total_trip_duration / trip_duration_list_len)
 trip_duration_list.sort()
 
 if trip_duration_list_len % 2 == 0:
-    median_trip = trip_duration_list()[int(trip_duration_list_len / 2)]
+    median_trip = find()[int(trip_duration_list_len / 2)]
 else:
     median_trip = trip_duration_list[int(trip_duration_list_len / 2)]
 
