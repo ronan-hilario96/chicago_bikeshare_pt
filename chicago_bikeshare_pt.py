@@ -107,7 +107,7 @@ input("Aperte Enter para continuar...")
 # TAREFA 5
 # TODO: Crie uma função para contar os gêneros. Retorne uma lista.
 # Isso deveria retornar uma lista com [count_male, count_female] (exemplo: [10, 15] significa 10 Masculinos, 15 Femininos)
-def count_gender(data_list, indice = -2):
+def count_gender(data_list):
     """
     Realiza a contagem de quantos generos tem em data_list.
     Informando o indice vc consegue obter a contagem de outros itens no data_list
@@ -117,16 +117,15 @@ def count_gender(data_list, indice = -2):
     Retorna:
         Uma lista de quantidade de elementos.
     """
-    elements = {}
-    for row in column_to_list(data_list, indice):
-        if row == '':
-            continue
-        if row not in elements:
-            elements[row] = 1
-        else:
-            elements[row] += 1
-
-    return list(elements.values())
+    male = 0
+    female = 0
+    for row in column_to_list(data_list, -2):
+        if row.lower() == "male":
+            male += 1
+        if row.lower() == "female":
+            female += 1
+    
+    return [male, female]
 
 
 print("\nTAREFA 5: Imprimindo o resultado de count_gender")
@@ -152,10 +151,13 @@ def most_popular_gender(data_list):
         Uma string Male ou Female.
     """
     answer = count_gender(data_list)
-    if answer[0] > answer[1]:
-        answer = "Male"
+    if(answer[0] == answer[1]):
+        answer = "Equal"
     else:
-        answer = "Female"
+        if answer[0] > answer[1]:
+            answer = "Male"
+        else:
+            answer = "Female"
 
     return answer
 
@@ -185,15 +187,34 @@ input("Aperte Enter para continuar...")
 # TODO: Crie um gráfico similar para user_types. Tenha certeza que a legenda está correta.
 print("\nTAREFA 7: Verifique o gráfico!")
 
+def count_items(column_list):
+    """
+    Realiza a contagem de quantos generos tem em data_list.
+    Informando o indice vc consegue obter a contagem de outros itens no data_list
+    Argumentos:
+        data_list: Lista de objetos.
+        indice: Chave do objeto.
+    Retorna:
+        Uma lista de quantidade de elementos.
+    """
+    elements = {}
+    for row in column_list:
+        if row not in elements:
+            elements[row] = 1
+        else:
+            elements[row] += 1
+    
+    return elements.keys(), elements.values()
+
 types = []
 for row in data_list[1:]:
     types.append(row[-3])
 types = set(types)
 
 gender_list = column_to_list(data_list, -3)
-quantity = count_gender(data_list, -3)
+quantity = count_items(gender_list)
 y_pos = list(range(len(types)))
-plt.bar(y_pos, quantity)
+plt.bar(y_pos, quantity[0])
 plt.ylabel('Quantidade')
 plt.xlabel('User type')
 plt.xticks(y_pos, types)
@@ -227,11 +248,7 @@ median_trip = 0.
 
 total_trip_duration = 0
 
-trip_duration_list = list(map(int, trip_duration_list))
-
-def find(trip_duration_list):
-    midel = len(trip_duration_list) / 2
-    return list(trip_duration_list[midel], trip_duration_list[midel-1])
+trip_duration_list = list(map(int, trip_duration_list))   
 
 for trip_duration in trip_duration_list:
     if trip_duration < min_trip or min_trip == 0:
@@ -248,7 +265,8 @@ mean_trip = round(total_trip_duration / trip_duration_list_len)
 trip_duration_list.sort()
 
 if trip_duration_list_len % 2 == 0:
-    median_trip = find()[int(trip_duration_list_len / 2)]
+    mean = int(len(trip_duration_list) / 2)
+    median_trip = (trip_duration_list[mean] + trip_duration_list[mean-1]) / 2
 else:
     median_trip = trip_duration_list[int(trip_duration_list_len / 2)]
 
@@ -300,24 +318,6 @@ input("Aperte Enter para continuar...")
 print("Você vai encarar o desafio? (yes ou no)")
 answer = "yes"
 
-def count_items(column_list):
-    """
-    Realiza a contagem de quantos generos tem em data_list.
-    Informando o indice vc consegue obter a contagem de outros itens no data_list
-    Argumentos:
-        data_list: Lista de objetos.
-        indice: Chave do objeto.
-    Retorna:
-        Uma lista de quantidade de elementos.
-    """
-    elements = {}
-    for row in column_list:
-        if row not in elements:
-            elements[row] = 1
-        else:
-            elements[row] += 1
-    
-    return elements.keys(), elements.values()
 
 
 if answer == "yes":
